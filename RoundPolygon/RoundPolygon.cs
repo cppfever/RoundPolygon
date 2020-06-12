@@ -8,9 +8,13 @@ namespace RoundPolygon
 {
     class RoundPolygon
     {
-        private int m_radius = 10;
         private GraphicsPath m_path = new GraphicsPath();
         private List<Point> m_points = new List<Point>();
+
+        public RoundPolygon()
+        {
+            Radius = 10;
+        }
 
         public int Radius { get; set; }
 
@@ -26,7 +30,7 @@ namespace RoundPolygon
             PointF pt = new PointF();
             Point pt1 = m_points[i];
             Point pt2 = m_points[(i + 1) % m_points.Count];
-            float fRat = m_radius / GetDistance(pt1, pt2);
+            float fRat = Radius / GetDistance(pt1, pt2);
             if (fRat > 0.5f)
                 fRat = 0.5f;
 
@@ -40,7 +44,7 @@ namespace RoundPolygon
             PointF pt = new PointF();
             Point pt1 = m_points[i];
             Point pt2 = m_points[(i + 1) % m_points.Count];
-            float fRat = m_radius / GetDistance(pt1, pt2);
+            float fRat = Radius / GetDistance(pt1, pt2);
             if (fRat > 0.5f)
                 fRat = 0.5f;
 
@@ -69,16 +73,6 @@ namespace RoundPolygon
 
             for(int i = 0; i < m_points.Count; i++)
             {
-/*                pt1 = GetLineStart(i);
-
-                if (i == 0)
-                    m_path.moveTo(pt1);
-                else
-                    m_path.quadTo(at(i), pt1);
-
-                pt2 = GetLineEnd(i);
-                m_path.lineTo(pt2);*/
-
                 pt1 = GetLineStart(i);
                 pt2 = GetLineEnd(i);
 
@@ -90,7 +84,6 @@ namespace RoundPolygon
                 }
                 else
                 {
-                    //m_path.quadTo(at(i), pt1);
                     AddCubicBezierFromQuadricBezier(lastpoint, m_points[i], pt1);
                 }
                 
@@ -98,9 +91,7 @@ namespace RoundPolygon
                 lastpoint = pt2;
             }
 
-            // close the last corner
             pt1 = GetLineStart(0);
-            //m_path.quadTo(at(0), pt1);
             AddCubicBezierFromQuadricBezier(lastpoint, m_points[0], pt1);
 
             return m_path;
